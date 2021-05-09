@@ -12,7 +12,12 @@ bot.on("message", msg => {
 
       if (fs.existsSync(folderPath)) {
         const data = require(folderPath);
-        msg.channel.send(data);
+        const content = new MessageEmbed()
+          .setTitle(newMsg[0].toUpperCase() + newMsg.substring(1))
+          .setColor(0xff0000)
+          .setDescription(data)
+
+        msg.channel.send(content);
         console.log("New message was been sended");
       } else {
         (async () => {
