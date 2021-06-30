@@ -1,6 +1,6 @@
+require('dotenv').config()
 const { Client, MessageEmbed } = require("discord.js");
 const bot = new Client();
-const file = require("./data/data.json");
 const jsonfile = require("jsonfile");
 const wiki = require("wikipedia");
 const fs = require("fs")
@@ -64,4 +64,4 @@ bot.on("message", msg => {
     }
 });
 
-bot.login("TOKEN");
+bot.login(process.env.TOKEN);

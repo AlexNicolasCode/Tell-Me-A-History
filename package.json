@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0",
+    "fs": "^0.0.1-security",
+    "jsonfile": "^6.1.0",
+    "wikipedia": "^1.1.1"
+  }
+}
