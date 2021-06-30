@@ -1,66 +1,33 @@
 require('dotenv').config()
 const { Client, MessageEmbed } = require("discord.js");
 const bot = new Client();
-const jsonfile = require("jsonfile");
 const wiki = require("wikipedia");
-const fs = require("fs")
 
-bot.on("message", msg => {
+bot.on("message", async msg => {
     if (msg.content.substr(0, 7) == "!tellme") {
-      const newMsg = msg.content.substr(8).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      console.log(newMsg)
-      const folderPath = `./history/${newMsg}.json`;
+        const newMsg = await msg.content.substr(8).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        console.log(newMsg)
 
-      if (fs.existsSync(folderPath)) {
-        const data = JSON.parse(fs.readFileSync(folderPath));
-        const content = new MessageEmbed()
-          .setTitle(data.title)
-          .setColor(0xff0000)
-          .setDescription(data.summary)
-          .setImage(data.image)
-          .setURL(data.url)
-
-        msg.channel.send(content);
-        console.log("New message was been sended");
-      } else {
-        (async () => {
-          try {
+        try {
             console.log("Searching...")
 
             const page = await wiki.page(newMsg);
             const summary = await page.summary();
-            const fileName = await newMsg.toLowerCase();
-            const arr = 
-            {
-                title: summary.title,
-                summary: summary.extract,
-                url: page.fullurl,
-                image: summary.thumbnail.source
-            }
-
-            jsonfile.writeFile(`./history/${fileName}.json`, arr, function (err) {
-              console.log(`${fileName}.json has been created!`)
-              if (err) console.error(err)
-            })
 
             setTimeout(() => {
-              const data = JSON.parse(fs.readFileSync(folderPath));
-              const content = new MessageEmbed()
-                .setTitle(data.title)
-                .setColor(0xff0000)
-                .setDescription(data.summary)
-                .setImage(data.image)
-                .setURL(data.url)
-
-              msg.channel.send(content);
-              console.log("New message was been sended");
+                const content = new MessageEmbed()
+                    .setTitle(summary.title)
+                    .setColor(0xff0000)
+                    .setDescription(summary.extract,)
+                    .setURL(page.fullurl,)
+    
+                msg.channel.send(content);
+                console.log("New message was been sended");
             }, 5)
 
-          } catch (error) {
-            console.log(error);
-          }
-        })();
-      }
+        } catch (err) {
+            console.log(err);
+        }
     }
 });
 
